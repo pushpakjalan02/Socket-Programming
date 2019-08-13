@@ -17,14 +17,19 @@ int main(int argc, char *argv[]){
 	
 	int client_addr_len, recv_data_len;
 
+	if(argc < 3){
+		printf("usage: %s <IP Address> <Port>", argv[0]);
+		exit(1);
+	}
+
 	struct sockaddr_in client_addr, server_addr;
 	char buffer[MAX_MSG_LEN];
 	
 	bzero((char*)&server_addr, sizeof(server_addr));
 	
 	server_addr.sin_family = AF_INET;
-	server_addr.sin_addr.s_addr = inet_addr("192.168.125.5");
-	server_addr.sin_port = htons(Server_Port);
+	server_addr.sin_addr.s_addr = inet_addr(argv[1]);
+	server_addr.sin_port = htons(atoi(argv[2]));
 
 	serv_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if(serv_sock < 0){
