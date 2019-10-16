@@ -48,4 +48,54 @@ int main(int argc, char *argv){
 
 	printf("Enter Probability");
 */
+
+	i = 0;
+	while(i<=cs_len){
+		int inc = pow(2,i);	
+		int flag = 0;
+		int count = 0;
+		for(j = inc-1; j < cs_len + msg_len; j++){
+			if(flag == inc){
+				flag = 0;
+				j += inc-1;
+				continue;
+			}			
+			else{
+				flag++;
+				if(cs_frame[j].digit == 1){
+					count++;				
+				}
+			}
+		}		
+		cs_frame[(int)pow(2,i)-1].digit = count%2;
+		i++;
+	}
+
+	printf("Checksummed Frame: ");
+	for(i = 0; i < cs_len + msg_len ; i++)
+		printf("%d", cs_frame[i].digit);
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
