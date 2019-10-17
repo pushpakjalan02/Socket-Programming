@@ -75,6 +75,13 @@ int main(int argc, char *argv){
 	for(i = 0; i < cs_len + msg_len ; i++)
 		printf("%d", cs_frame[i].digit);
 
+	float probability;
+	printf("\n\nEnter Probability\n");
+	scanf("%f", &probability);
+	probability = (int)(probability*100+0.5)/100.0;
+
+	int rand_no_1; 
+
 }
 
 
