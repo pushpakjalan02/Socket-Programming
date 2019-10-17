@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<math.h>
+#include<time.h>
 
 struct msg_dt{
 	unsigned int digit : 2;
@@ -76,12 +77,27 @@ int main(int argc, char *argv){
 		printf("%d", cs_frame[i].digit);
 
 	float probability;
-	printf("\n\nEnter Probability\n");
+	printf("\n\nEnter Probability of error\n");
 	scanf("%f", &probability);
 	probability = (int)(probability*100+0.5)/100.0;
 
-	int rand_no_1; 
+	srand(time(0));
 
+	int rand_no_1 = (rand() % (100-1+1)) + 1;
+	printf("%d\n", rand_no_1);
+	if(rand_no_1 <= probability*100){
+		// Error
+		int rand_no_2 = (rand() % ((cs_len+msg_len-1) - 0 + 1)) + 0;
+		// Flip
+		cs_frame[rand_no_2].digit = cs_frame[rand_no_2].digit == 0 ? 1 : 0;
+		printf("%d\n", rand_no_2);
+
+	}
+
+	for(i = 0; i < cs_len + msg_len ; i++)
+		printf("%d   %d\n", i, cs_frame[i].digit);
+	// Transmit
+	//Check
 }
 
 
