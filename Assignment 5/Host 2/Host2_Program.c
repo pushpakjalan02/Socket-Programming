@@ -60,18 +60,33 @@ int main(int argc, char *argv[]){
 
 		// Necessary Code Here
 
-		int cs_frame_length = cs_len + msg_len;
+		memset(buffer, 0x0, MAX_MSG_LEN);
+		recv(new_serv_sock, buffer, sizeof(buffer), 0);
+		
+		int cs_frame_length = strlen(buffer);
+
 		int i = 0;
 		int j = 0;
 		int k = 0;
+		
+		// Build Structure
+		struct msg_dt *cs_frame = (struct msg_dt*) calloc(sizeof(struct msg_dt) * cs_frame_length, 0);
+		for(i = 0; i < cs_frame_length; i++)
+			cs_frame[i].digit = (int)(buffer[i] - '0');
+
+		// Calculate length of checksum from total length and save it.
 		while(1){
 			if(pow(2,i) >=  cs_frame_length + 1)
 				break;
 			i++;
 		}
-		cs_len = i;
+		int cs_len = i;
+
+		// Length of message only.
 		msg_len = cs_frame_length - cs_len;
 		i = 0;
+		
+		// Error Correction Code Here
 		int sum = 0;
 		while(i < cs_len){
 			int checksum_position = pow(2, i) - 1;
@@ -93,14 +108,18 @@ int main(int argc, char *argv[]){
 			}
 			i++;
 		}
-		cs_frame[sum - 1].digit = cs_frame[sum - 1].digit == 1 ? 0 : 1;
+
+		// Flip the error bit if error present
+		if(sum > 0)
+			cs_frame[sum - 1].digit = cs_frame[sum - 1].digit == 1 ? 0 : 1;
 /*
 		for(i = 0; i < cs_len + msg_len ; i++)
 			printf("%d   %d\n", i, cs_frame[i].digit);
 */
+		// Display Corrected Message
 		i = 0;
 		j = 0;
-		printf("\n\nMessage is:");
+		printf("\n\nMessage is: ");
 		while(i < cs_frame_length){
 			i++;
 			if(pow(2, j) == i){
