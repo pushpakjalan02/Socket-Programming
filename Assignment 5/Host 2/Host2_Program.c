@@ -60,6 +60,59 @@ int main(int argc, char *argv[]){
 
 		// Necessary Code Here
 
+		int cs_frame_length = cs_len + msg_len;
+		int i = 0;
+		int j = 0;
+		int k = 0;
+		while(1){
+			if(pow(2,i) >=  cs_frame_length + 1)
+				break;
+			i++;
+		}
+		cs_len = i;
+		msg_len = cs_frame_length - cs_len;
+		i = 0;
+		int sum = 0;
+		while(i < cs_len){
+			int checksum_position = pow(2, i) - 1;
+			int interval = pow(2, i);
+			int count = 0;
+			int flag = 0;
+			for(j = checksum_position; j < cs_frame_length; j++){
+				flag++;
+				if(cs_frame[j].digit == 1)
+					count++;
+				if(flag == interval){
+					flag = 0;
+					j += interval;
+					continue;
+				}
+			}
+			if(count%2 == 1){
+				sum += pow(2, i);	
+			}
+			i++;
+		}
+		cs_frame[sum - 1].digit = cs_frame[sum - 1].digit == 1 ? 0 : 1;
+/*
+		for(i = 0; i < cs_len + msg_len ; i++)
+			printf("%d   %d\n", i, cs_frame[i].digit);
+*/
+		i = 0;
+		j = 0;
+		printf("\n\nMessage is:");
+		while(i < cs_frame_length){
+			i++;
+			if(pow(2, j) == i){
+				j++;
+				continue;
+			}
+			printf("%d", cs_frame[i-1].digit);
+		}
+		printf("\n");
+
+		// Ends Here
+		
 		close(new_serv_sock);
 	}
 }
