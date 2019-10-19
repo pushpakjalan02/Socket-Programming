@@ -59,10 +59,10 @@ int main(int argc, char *argv[]){
 		}
 
 		// Necessary Code Here
-
+		printf("\n\n------------------------------------------------------\n\n");
 		memset(buffer, 0x0, MAX_MSG_LEN);
 		recv(new_serv_sock, buffer, sizeof(buffer), 0);
-		
+		printf("Received Frame: %s\n", buffer);
 		int cs_frame_length = strlen(buffer);
 
 		int i = 0;
@@ -74,6 +74,11 @@ int main(int argc, char *argv[]){
 		for(i = 0; i < cs_frame_length; i++)
 			cs_frame[i].digit = (int)(buffer[i] - '0');
 
+/*
+		for(i = 0; i < cs_frame_length ; i++)
+			printf("%d   %d\n", i, cs_frame[i].digit);
+*/
+
 		// Calculate length of checksum from total length and save it.
 		while(1){
 			if(pow(2,i) >=  cs_frame_length + 1)
@@ -83,7 +88,8 @@ int main(int argc, char *argv[]){
 		int cs_len = i;
 
 		// Length of message only.
-		msg_len = cs_frame_length - cs_len;
+		int msg_len = cs_frame_length - cs_len;
+		
 		i = 0;
 		
 		// Error Correction Code Here
@@ -112,14 +118,17 @@ int main(int argc, char *argv[]){
 		// Flip the error bit if error present
 		if(sum > 0)
 			cs_frame[sum - 1].digit = cs_frame[sum - 1].digit == 1 ? 0 : 1;
-/*
+
+		// Display Received Message After Correction
+		printf("Received Frame after Correction: ");
 		for(i = 0; i < cs_len + msg_len ; i++)
-			printf("%d   %d\n", i, cs_frame[i].digit);
-*/
-		// Display Corrected Message
+			printf("%d", cs_frame[i].digit);
+		printf("\n");
+
+		// Display Corrected Message only
 		i = 0;
 		j = 0;
-		printf("\n\nMessage is: ");
+		printf("\nMessage is: ");
 		while(i < cs_frame_length){
 			i++;
 			if(pow(2, j) == i){
@@ -133,5 +142,7 @@ int main(int argc, char *argv[]){
 		// Ends Here
 		
 		close(new_serv_sock);
+
+		printf("\n------------------------------------------------------\n\n");
 	}
 }

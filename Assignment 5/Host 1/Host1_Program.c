@@ -46,10 +46,13 @@ int main(int argc, char *argv[]){
 	}
 
 	// Necessary Code Here
+	
+	printf("\n\n------------------------------------------------------\n\n");
+
 	int i, j, k;
 	char msg_str[1000];
 
-	printf("Enter Message:\n");
+	printf("Enter Message: ");
 	scanf("%s", msg_str);
 
 	int msg_len = strlen(msg_str);
@@ -115,7 +118,7 @@ int main(int argc, char *argv[]){
 
 
 	// Checksummed frame is displayed
-	printf("Checksummed Frame: ");
+	printf("\nChecksummed Frame: ");
 	for(i = 0; i < cs_len + msg_len ; i++)
 		printf("%d", cs_frame[i].digit);
 
@@ -129,7 +132,7 @@ int main(int argc, char *argv[]){
 	srand(time(0));
 
 	int rand_no_1 = (rand() % (100-1+1)) + 1;
-	printf("Random No. 1: %d\n", rand_no_1);
+	printf("Random No. 1: %d\tBetween [1:n]\n", rand_no_1);
 
 	// If Error required to be simulate, randomly select bit position.
 	if(rand_no_1 <= probability*100){
@@ -137,7 +140,8 @@ int main(int argc, char *argv[]){
 		int rand_no_2 = (rand() % ((cs_len+msg_len-1) - 0 + 1)) + 0;
 		// Flip the bit position
 		cs_frame[rand_no_2].digit = cs_frame[rand_no_2].digit == 0 ? 1 : 0;
-		printf("Random No. 2:%d\n", rand_no_2);
+		//cs_frame[0].digit = cs_frame[0].digit == 0 ? 1 : 0;
+		printf("Random No. 2: %d\t\tBetween [0:n-1]\n", rand_no_2);
 	}
 
 	memset(buffer, 0x0, MAX_MSG_LEN);
@@ -153,6 +157,8 @@ int main(int argc, char *argv[]){
 	// Send Error Frame to Server
 	send(sock, buffer, strlen(buffer) + 1, 0);
 
+	printf("\n------------------------------------------------------\n\n");
+	
 	// Ends Here
 
 	close(sock);
