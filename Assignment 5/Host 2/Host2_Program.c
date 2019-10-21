@@ -80,6 +80,7 @@ int main(int argc, char *argv[]){
 */
 
 		// Calculate length of checksum from total length and save it.
+		i = 0;	
 		while(1){
 			if(pow(2,i) >=  cs_frame_length + 1)
 				break;
@@ -89,7 +90,6 @@ int main(int argc, char *argv[]){
 
 		// Length of message only.
 		int msg_len = cs_frame_length - cs_len;
-		
 		i = 0;
 		
 		// Error Correction Code Here
@@ -128,6 +128,8 @@ int main(int argc, char *argv[]){
 		// Display Corrected Message only
 		i = 0;
 		j = 0;
+		k = pow(2, msg_len - 1);
+		sum = 0;
 		printf("\nMessage is: ");
 		while(i < cs_frame_length){
 			i++;
@@ -135,9 +137,10 @@ int main(int argc, char *argv[]){
 				j++;
 				continue;
 			}
-			printf("%d", cs_frame[i-1].digit);
+			sum += cs_frame[i-1].digit*k;
+			k /= 2;
 		}
-		printf("\n");
+		printf("%c\n", (char)sum);
 
 		// Ends Here
 		
