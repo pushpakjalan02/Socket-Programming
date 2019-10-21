@@ -50,10 +50,29 @@ int main(int argc, char *argv[]){
 	printf("\n\n------------------------------------------------------\n\n");
 
 	int i, j, k;
+	char msg;
 	char msg_str[1000];
 
-	printf("Enter Message: ");
-	scanf("%s", msg_str);
+	printf("Enter Character: ");
+	scanf("%c", &msg);
+
+	int bin_str[1000];
+	int n = (int)msg;
+	int count = 0;
+	while(n != 0){
+		int temp = n % 2;
+		bin_str[count] = temp;
+		n /= 2;
+		count++;
+	}
+
+	for(i = 0; i < count; i++){
+		msg_str[count - i - 1] = bin_str[i]+'0';
+	}
+	
+	msg_str[count] = '\0';
+	
+	printf("\nBinary String: %s\n", msg_str);
 
 	int msg_len = strlen(msg_str);
 
